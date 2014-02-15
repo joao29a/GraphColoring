@@ -12,6 +12,7 @@ int main(int argc, char** argv){
         for (i = 0; i < vertex->edges_size; i++){
             printf("%s | ", vertex->edges[i]);
         }
+        printf("\n");
         free_graph(graph);
     }
     else printf("Missing arguments.\n");

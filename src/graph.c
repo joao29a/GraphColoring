@@ -13,5 +13,5 @@ vertex_node_t* get_vertex(Graph* graph, char* key){
 }
 
 void free_graph(Graph* graph){
-    free_hash_table(graph, &free_vertex_node);
+    free_hash_table(graph, (void (*)(void*)) &free_vertex_node);
 }
