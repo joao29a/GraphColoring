@@ -1,7 +1,9 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include "heap.h"
+
+/* define the max size of the container */
+void** create_heap(size_t size){
+    return (void**) malloc(sizeof(void*) * size);
+}
 
 static void heapify(void** arr, size_t len, int i, int (*func)(void*,void*)){
     size_t largest;
@@ -31,42 +33,26 @@ void* heap_find(void** arr){
     return arr[0];
 }
 
-void heap_push(void** arr, void* elem, size_t* len, int (*func)(void*,void*)){
-    if (*len == 0){
-        arr = malloc(sizeof(void*));
-        arr[0] = elem;
-        *len += 1;
-        build_heap(arr, *len, func);
+static void heap_increase_key(void** arr, int i, int (*func)(void*,void*)){
+    while (i > 0 && func(arr[i], arr[i/2])){
+        void* temp = arr[i];
+        arr[i] = arr[i/2];
+        arr[i/2] = temp;
+        i = i/2;
     }
-    else{
-        void** temp = realloc(arr, sizeof(void*) * *len + 1);
+}
 
-        if (temp != NULL){
-            arr = temp;
-            arr[*len] = elem;
-            build_heap(arr, *len + 1, func);
-            *len += 1;
-        }
-    }
+void heap_push(void** arr, void* elem, size_t* len, int (*func)(void*,void*)){
+    arr[*len] = elem;
+    heap_increase_key(arr, *len, func);
+    *len += 1;
 }
 
 void* heap_pop(void** arr, size_t* len, int (*func)(void*,void*)){
     if (arr == NULL || *len == 0) return NULL;
-
-    void* root = malloc(sizeof(void*));
-    memcpy(root, heap_find(arr), sizeof(void*));
-
-    void* dump = arr[0]; 
+    void* root = heap_find(arr);
     arr[0] = arr[*len - 1];
-    free(dump);
-
-    void** temp = realloc(arr, sizeof(void*) * *len - 1);
-    if (temp != NULL){
-        arr = temp;
-        build_heap(arr, *len - 1, func);
-        *len -= 1;
-    }
-    else return NULL;
-
+    *len -= 1;
+    heapify(arr, *len, 0, func);
     return root;
 }
