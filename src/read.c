@@ -7,25 +7,23 @@ void* read_file(Graph* graph, char* filename){
         return NULL;
     }
     else{
-        char line[255], type;
+        char line[255], type, key[2][50];
         while (fgets(line,255,file) != NULL){
             sscanf(line,"%c",&type);
             if (type == 'e'){
-                char* key = malloc(sizeof(char)*50);
-                char* value = malloc(sizeof(char)*50);
-                sscanf(line,"%*s %s %s", key, value);
+                sscanf(line,"%*s %s %s",key[0], key[1]);
 
-                vertex_node_t* vertex = get_vertex(graph, key);
+                int i;
+                for (i = 0; i < 2; i++){
+                    vertex_node_t* vertex = get_vertex(graph, key[i]);
 
-                if (vertex == NULL){
-                    vertex = create_vertex_node(key);
-                    set_edge(vertex, value);
-                    set_vertex(graph, key, vertex);
+                    if (vertex == NULL){
+                        vertex = create_vertex_node(key[i]);
+                        set_edge(vertex, key[(i + 1) % 2]);
+                        set_vertex(graph, key[i], vertex);
+                    }
+                    else set_edge(vertex, key[(i + 1) % 2]);
                 }
-                else set_edge(vertex, value);
-                
-                free(key);
-                free(value);
             }
         }
     }

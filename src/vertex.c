@@ -6,6 +6,7 @@ vertex_node_t* create_vertex_node(char* name){
     if (strlen(name) == 0) return NULL;
     vertex_node_t* vertex = malloc(sizeof(vertex_node_t));
     vertex->name = strdup(name);
+    vertex->color = -1;
     vertex->edges_size = 0;
     return vertex;
 }

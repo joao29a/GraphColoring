@@ -3,6 +3,7 @@
 
 typedef struct vertex_node {
     char* name;
+    int color;
     unsigned int edges_size;
     char** edges;
 
