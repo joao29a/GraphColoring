@@ -3,21 +3,25 @@
 
 typedef unsigned long int u_int32;
 
-struct hash_node{
+typedef struct hash_node{
     char* key;
     void* value;
     struct hash_node* next;
-};
+} hash_node_t;
 
-typedef struct hash_node hash_node_t;
+typedef struct hash_iterator{
+    hash_node_t* hash_node;
+    struct hash_iterator *next;
+} hash_iterator_t;
 
-struct hash_table{
+typedef struct hash_table{
     int size;
+    hash_iterator_t *begin;
+    hash_iterator_t *end;
     hash_node_t** node;
-};
+} hash_table_t;
 
-typedef struct hash_table hash_table_t;
-
+static void set_hash_iterator(hash_table_t*, hash_node_t*);
 static int hash_function(hash_table_t*, char*);
 static hash_node_t* create_pair(char*, void*);
 void free_hash_table(hash_table_t* table, void (*)(void*));
