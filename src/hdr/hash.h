@@ -21,9 +21,9 @@ typedef struct hash_table{
     hash_node_t** node;
 } hash_table_t;
 
-static void set_hash_iterator(hash_table_t*, hash_node_t*);
-static int hash_function(hash_table_t*, char*);
-static hash_node_t* create_pair(char*, void*);
+void set_hash_iterator(hash_table_t*, hash_node_t*);
+int hash_function(hash_table_t*, char*);
+hash_node_t* create_pair(char*, void*);
 void free_hash_table(hash_table_t* table, void (*)(void*));
 hash_table_t* create_hash_table(int);
 void set_hash(hash_table_t*, char*, void*);

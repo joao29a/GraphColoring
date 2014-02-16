@@ -5,8 +5,8 @@ void** create_heap(size_t size){
     return (void**) malloc(sizeof(void*) * size);
 }
 
-static void heapify(void** arr, size_t len, int i, int (*func)(void*,void*)){
-    size_t largest;
+void heapify(void** arr, size_t len, int i, int (*func)(void*,void*)){
+    int largest;
     size_t l = 2 * i;
     size_t r = 2 * i + 1;
 
@@ -29,11 +29,11 @@ void build_heap(void** arr, size_t len, int (*func)(void*,void*)){
     }
 }
 
-void* heap_find(void** arr){
+void* heap_peek(void** arr){
     return arr[0];
 }
 
-static void heap_increase_key(void** arr, int i, int (*func)(void*,void*)){
+void heap_key(void** arr, int i, int (*func)(void*,void*)){
     while (i > 0 && func(arr[i], arr[i/2])){
         void* temp = arr[i];
         arr[i] = arr[i/2];
@@ -44,13 +44,13 @@ static void heap_increase_key(void** arr, int i, int (*func)(void*,void*)){
 
 void heap_push(void** arr, void* elem, size_t* len, int (*func)(void*,void*)){
     arr[*len] = elem;
-    heap_increase_key(arr, *len, func);
+    heap_key(arr, *len, func);
     *len += 1;
 }
 
 void* heap_pop(void** arr, size_t* len, int (*func)(void*,void*)){
     if (arr == NULL || *len == 0) return NULL;
-    void* root = heap_find(arr);
+    void* root = heap_peek(arr);
     arr[0] = arr[*len - 1];
     *len -= 1;
     heapify(arr, *len, 0, func);

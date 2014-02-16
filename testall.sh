@@ -1,3 +1,3 @@
 #!/bin/bash
 
-time for i in {1..30}; do echo gcol$i; time ./out input/gcol$i.txt; echo; done
+time for i in $(find ./input/ -type f); do echo $i; time ./out $i; echo; done

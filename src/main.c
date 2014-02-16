@@ -15,8 +15,6 @@ int main(int argc, char** argv){
             j = j->next;
         }
         printf("total colors: %zu\n", total_colors);
-
-        free_graph(graph);
     }
     else printf("Missing arguments.\n");
     return 0;

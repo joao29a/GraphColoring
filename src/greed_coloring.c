@@ -6,7 +6,7 @@ int compare(vertex_node_t* vertex1, vertex_node_t* vertex2){
 
 /* O(2V) */
 vertex_node_t** init_heap(Graph* graph, size_t* len){
-    vertex_node_t** heapq = (vertex_node_t**) create_heap(1024);
+    vertex_node_t** heapq = (vertex_node_t**) create_heap(5000);
     
     hash_iterator_t* j = graph->begin;
     while (j != NULL){
@@ -31,7 +31,7 @@ size_t greed_coloring(Graph* graph){
     while (heapq_len != 0){
         vertex_node_t* vertex = heap_pop((void**) heapq, &heapq_len, 
                 (int(*)(void*,void*)) &compare);
-        int i;
+        unsigned int i;
         for (i = 0; i < vertex->edges_size; i++){
             vertex_node_t* adj_vertex = get_vertex(graph, vertex->edges[i]);
             if (adj_vertex->color > -1){

@@ -5,9 +5,9 @@
 #include "hash.h"
 
 //djb2 algorithm
-static int hash_function(hash_table_t* table, char* key){
+int hash_function(hash_table_t* table, char* key){
     u_int32 hash = 5381;
-    int i;
+    unsigned int i;
     for (i = 0; i < strlen(key); i++){    
         hash = ((hash << 5) + hash) + key[i];
     }
@@ -31,15 +31,16 @@ hash_table_t* create_hash_table(int size){
     return table;
 }
 
-static hash_node_t* create_pair(char* key, void* value){
+hash_node_t* create_pair(char* key, void* value){
     hash_node_t* node = malloc(sizeof(hash_node_t));
-    node->key = strdup(key);
+    node->key = malloc(sizeof(char) * strlen(key));
+    strcpy(node->key, key);
     node->value = value;
     node->next = NULL;
     return node;
 }
 
-static void set_hash_iterator(hash_table_t* table, hash_node_t* node){
+void set_hash_iterator(hash_table_t* table, hash_node_t* node){
     if (table->begin == NULL){
         table->begin = malloc(sizeof(hash_iterator_t));
         table->begin->hash_node = node;
