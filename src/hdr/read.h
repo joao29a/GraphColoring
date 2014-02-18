@@ -6,6 +6,6 @@
 #include "graph.h"
 #include "vertex.h"
 
-void* read_file(Graph* graph, char*);
+void read_file(Graph*, int, int);
 
 #endif
