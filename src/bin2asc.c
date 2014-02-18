@@ -51,7 +51,7 @@ int get_params()
 
 /* ====================================================== */
 
-BOOL get_edge(i, j)
+char get_edge(i, j)
     int i;
     int j;
 {
@@ -108,7 +108,7 @@ void write_graph_DIMACS_ascii(file, graph, callback)
     read_graph_DIMACS_bin(file);
 
     int i,j;
-    
+
     for ( i = 0; i<Nr_vert; i++ )
     {
         for ( j=0; j<=i; j++ )
