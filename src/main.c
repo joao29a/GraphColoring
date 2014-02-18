@@ -1,5 +1,5 @@
 #include "graph.h"
-#include "../bin2asc.h"
+#include "bin2asc.h"
 #include "read.h"
 #include "heap.h"
 #include "greed_coloring.h"
@@ -7,7 +7,8 @@
 int main(int argc, char** argv){
     if (argc > 1){
         Graph* graph = create_graph();
-        write_graph_DIMACS_ascii(argv[1], (void*) graph, &read_file);
+        write_graph_DIMACS_ascii(argv[1], (void*) graph, 
+                (void(*)(void*,int,int)) &read_file);
         size_t total_colors = greed_coloring(graph);
         hash_iterator_t* j = graph->begin;
         while (j != NULL){
