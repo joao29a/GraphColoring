@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ps_hwpc_eventlist class="PAPI">
+    <!-- =============================================
+       Configuration file for John's system
+
+       ============================================= -->
+    <ps_hwpc_event type="preset" name="PAPI_BR_MSP" />
+    <ps_hwpc_event type="preset" name="PAPI_BR_PRC" />
+    <ps_hwpc_event type="preset" name="PAPI_BR_TKN" />
+    <ps_hwpc_event type="preset" name="PAPI_FP_INS" />
+    <ps_hwpc_event type="preset" name="PAPI_TOT_CYC" />
+    <ps_hwpc_event type="preset" name="PAPI_TOT_INS" />
+    <ps_hwpc_event type="preset" name="PAPI_L1_DCM" />
+    <ps_hwpc_event type="preset" name="PAPI_L1_TCM" />
+    <ps_hwpc_event type="preset" name="PAPI_L2_DCA" />
+    <ps_hwpc_event type="preset" name="PAPI_L2_DCM" />
+    <ps_hwpc_event type="preset" name="PAPI_L2_DCR" />
+    <ps_hwpc_event type="preset" name="PAPI_L2_DCW" />
+    <ps_hwpc_event type="preset" name="PAPI_L2_ICR" />
+    <ps_hwpc_event type="preset" name="PAPI_L2_STM" />
+    <ps_hwpc_event type="preset" name="PAPI_L2_TCM" />
+    <ps_hwpc_event type="preset" name="PAPI_L3_DCA" />
+    <ps_hwpc_event type="preset" name="PAPI_LD_INS" />
+    <ps_hwpc_event type="preset" name="PAPI_SR_INS" />
+    <ps_hwpc_event type="preset" name="PAPI_STL_ICY" />
+    <ps_hwpc_event type="preset" name="PAPI_TLB_DM" />
+</ps_hwpc_eventlist>
