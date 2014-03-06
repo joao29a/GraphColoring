@@ -8,7 +8,7 @@
    */
 
 #include <stdlib.h>
-#include "bin2asc.h"
+#include "hdr/bin2asc.h"
 
 char masks[ 8 ] = { 0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80 };
 
@@ -17,6 +17,7 @@ int get_params()
        containing Dimacs format "p ??? num num" */
 {
     char c, *tmp;
+
     char * pp = Preamble;
     int stop = 0;
     tmp = (char *)calloc(100, sizeof(char));

@@ -1,27 +1,53 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <ps_hwpc_eventlist class="PAPI">
-    <!-- =============================================
-       Configuration file for John's system
-
-       ============================================= -->
-    <ps_hwpc_event type="preset" name="PAPI_BR_MSP" />
-    <ps_hwpc_event type="preset" name="PAPI_BR_PRC" />
-    <ps_hwpc_event type="preset" name="PAPI_BR_TKN" />
-    <ps_hwpc_event type="preset" name="PAPI_FP_INS" />
-    <ps_hwpc_event type="preset" name="PAPI_TOT_CYC" />
-    <ps_hwpc_event type="preset" name="PAPI_TOT_INS" />
-    <ps_hwpc_event type="preset" name="PAPI_L1_DCM" />
-    <ps_hwpc_event type="preset" name="PAPI_L1_TCM" />
-    <ps_hwpc_event type="preset" name="PAPI_L2_DCA" />
-    <ps_hwpc_event type="preset" name="PAPI_L2_DCM" />
-    <ps_hwpc_event type="preset" name="PAPI_L2_DCR" />
-    <ps_hwpc_event type="preset" name="PAPI_L2_DCW" />
-    <ps_hwpc_event type="preset" name="PAPI_L2_ICR" />
-    <ps_hwpc_event type="preset" name="PAPI_L2_STM" />
-    <ps_hwpc_event type="preset" name="PAPI_L2_TCM" />
-    <ps_hwpc_event type="preset" name="PAPI_L3_DCA" />
-    <ps_hwpc_event type="preset" name="PAPI_LD_INS" />
-    <ps_hwpc_event type="preset" name="PAPI_SR_INS" />
-    <ps_hwpc_event type="preset" name="PAPI_STL_ICY" />
-    <ps_hwpc_event type="preset" name="PAPI_TLB_DM" />
+  <ps_hwpc_event type="preset" name="PAPI_L1_DCM" />
+  <ps_hwpc_event type="preset" name="PAPI_L1_ICM" />
+  <ps_hwpc_event type="preset" name="PAPI_L2_DCM" />
+  <ps_hwpc_event type="preset" name="PAPI_L2_ICM" />
+  <ps_hwpc_event type="preset" name="PAPI_L1_TCM" />
+  <ps_hwpc_event type="preset" name="PAPI_L2_TCM" />
+  <ps_hwpc_event type="preset" name="PAPI_L3_TCM" />
+  <ps_hwpc_event type="preset" name="PAPI_TLB_DM" />
+  <ps_hwpc_event type="preset" name="PAPI_TLB_IM" />
+  <ps_hwpc_event type="preset" name="PAPI_L1_LDM" />
+  <ps_hwpc_event type="preset" name="PAPI_L1_STM" />
+  <ps_hwpc_event type="preset" name="PAPI_L2_STM" />
+  <ps_hwpc_event type="preset" name="PAPI_STL_ICY" />
+  <ps_hwpc_event type="preset" name="PAPI_BR_UCN" />
+  <ps_hwpc_event type="preset" name="PAPI_BR_CN" />
+  <ps_hwpc_event type="preset" name="PAPI_BR_TKN" />
+  <ps_hwpc_event type="preset" name="PAPI_BR_NTK" />
+  <ps_hwpc_event type="preset" name="PAPI_BR_MSP" />
+  <ps_hwpc_event type="preset" name="PAPI_BR_PRC" />
+  <ps_hwpc_event type="preset" name="PAPI_TOT_INS" />
+  <ps_hwpc_event type="preset" name="PAPI_FP_INS" />
+  <ps_hwpc_event type="preset" name="PAPI_LD_INS" />
+  <ps_hwpc_event type="preset" name="PAPI_SR_INS" />
+  <ps_hwpc_event type="preset" name="PAPI_BR_INS" />
+  <ps_hwpc_event type="preset" name="PAPI_TOT_CYC" />
+  <ps_hwpc_event type="preset" name="PAPI_L2_DCH" />
+  <ps_hwpc_event type="preset" name="PAPI_L2_DCA" />
+  <ps_hwpc_event type="preset" name="PAPI_L3_DCA" />
+  <ps_hwpc_event type="preset" name="PAPI_L2_DCR" />
+  <ps_hwpc_event type="preset" name="PAPI_L3_DCR" />
+  <ps_hwpc_event type="preset" name="PAPI_L2_DCW" />
+  <ps_hwpc_event type="preset" name="PAPI_L3_DCW" />
+  <ps_hwpc_event type="preset" name="PAPI_L2_ICH" />
+  <ps_hwpc_event type="preset" name="PAPI_L2_ICA" />
+  <ps_hwpc_event type="preset" name="PAPI_L3_ICA" />
+  <ps_hwpc_event type="preset" name="PAPI_L2_ICR" />
+  <ps_hwpc_event type="preset" name="PAPI_L3_ICR" />
+  <ps_hwpc_event type="preset" name="PAPI_L2_TCA" />
+  <ps_hwpc_event type="preset" name="PAPI_L3_TCA" />
+  <ps_hwpc_event type="preset" name="PAPI_L2_TCR" />
+  <ps_hwpc_event type="preset" name="PAPI_L3_TCR" />
+  <ps_hwpc_event type="preset" name="PAPI_L2_TCW" />
+  <ps_hwpc_event type="preset" name="PAPI_L3_TCW" />
+  <ps_hwpc_event type="preset" name="PAPI_FDV_INS" />
+  <ps_hwpc_event type="preset" name="PAPI_FP_OPS" />
+  <ps_hwpc_event type="preset" name="PAPI_SP_OPS" />
+  <ps_hwpc_event type="preset" name="PAPI_DP_OPS" />
+  <ps_hwpc_event type="preset" name="PAPI_VEC_SP" />
+  <ps_hwpc_event type="preset" name="PAPI_VEC_DP" />
+  <ps_hwpc_event type="preset" name="PAPI_REF_CYC" />
 </ps_hwpc_eventlist>

@@ -1,4 +1,4 @@
-#include "greed_coloring.h"
+#include "hdr/greed_coloring.h"
 
 int compare(vertex_node_t* vertex1, vertex_node_t* vertex2){
     return vertex1->edges_size > vertex2->edges_size;
@@ -10,7 +10,7 @@ vertex_node_t** init_heap(Graph* graph, size_t* len){
     
     hash_iterator_t* j = graph->begin;
     while (j != NULL){
-        heapq[*len] = j->hash_node->value;
+        heapq[*len] = (vertex_node_t*) j->hash_node->value;
         *len += 1;
         j = j->next;
     }
@@ -29,7 +29,7 @@ size_t greed_coloring(Graph* graph){
     char color[20];
 
     while (heapq_len != 0){
-        vertex_node_t* vertex = heap_pop((void**) heapq, &heapq_len, 
+        vertex_node_t* vertex = (vertex_node_t*) heap_pop((void**) heapq, &heapq_len, 
                 (int(*)(void*,void*)) &compare);
         unsigned int i;
         for (i = 0; i < vertex->edges_size; i++){
@@ -41,7 +41,7 @@ size_t greed_coloring(Graph* graph){
         }
         for (i = 0; i < used_len; i++){
             sprintf(color,"%d",i);
-            char* name = get_hash(adj_colors, color);
+            char* name = (char*) get_hash(adj_colors, color);
             
             if (name == NULL || strcmp(name, vertex->name) != 0){
                 vertex->color = i;

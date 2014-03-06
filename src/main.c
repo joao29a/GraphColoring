@@ -1,7 +1,7 @@
-#include "graph.h"
-#include "bin2asc.h"
-#include "heap.h"
-#include "greed_coloring.h"
+#include "hdr/graph.h"
+#include "hdr/bin2asc.h"
+#include "hdr/heap.h"
+#include "hdr/greed_coloring.h"
 
 int main(int argc, char** argv){
     if (argc > 1){

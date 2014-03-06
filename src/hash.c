@@ -2,7 +2,7 @@
 #include <limits.h>
 #include <stdlib.h>
 #include <string.h>
-#include "hash.h"
+#include "hdr/hash.h"
 
 //djb2 algorithm
 int hash_function(hash_table_t* table, char* key){
@@ -17,11 +17,11 @@ int hash_function(hash_table_t* table, char* key){
 hash_table_t* create_hash_table(int size){
     hash_table_t* table = NULL;
 
-    table = malloc(sizeof(hash_table_t));
+    table = (hash_table_t*) malloc(sizeof(hash_table_t));
     table->size = size;
     table->begin = NULL;
     table->end = NULL;
-    table->node = malloc(sizeof(hash_node_t*)*size);
+    table->node = (hash_node_t**) malloc(sizeof(hash_node_t*)*size);
 
     int i;
     for (i = 0; i < size; i++){
@@ -32,8 +32,8 @@ hash_table_t* create_hash_table(int size){
 }
 
 hash_node_t* create_pair(char* key, void* value){
-    hash_node_t* node = malloc(sizeof(hash_node_t));
-    node->key = malloc(sizeof(char) * strlen(key));
+    hash_node_t* node = (hash_node_t*) malloc(sizeof(hash_node_t));
+    node->key = (char*) malloc(sizeof(char) * strlen(key));
     strcpy(node->key, key);
     node->value = value;
     node->next = NULL;
@@ -42,12 +42,12 @@ hash_node_t* create_pair(char* key, void* value){
 
 void set_hash_iterator(hash_table_t* table, hash_node_t* node){
     if (table->begin == NULL){
-        table->begin = malloc(sizeof(hash_iterator_t));
+        table->begin = (hash_iterator_t*) malloc(sizeof(hash_iterator_t));
         table->begin->hash_node = node;
         table->begin->next = NULL;
         table->end = table->begin;
     } else {
-        table->end->next = malloc(sizeof(hash_iterator_t));
+        table->end->next = (hash_iterator_t*) malloc(sizeof(hash_iterator_t));
         table->end = table->end->next;
         table->end->hash_node = node;
         table->end->next = NULL;
