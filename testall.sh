@@ -1,15 +1,17 @@
 #!/bin/bash
 
+prog=color.out
+
 get_time(){
     time for i in $(find ./input/ -type f); do 
-        echo $i; time ./out $i; 
+        echo $i; time ./$prog $i; 
         echo; 
     done
 }
 
 perf(){
     for i in $(find ./input/ -type f); do
-        psrun -c $1.xml -o $i -F text ./out $i
+        psrun -c $1.xml -o $i -F text ./$prog $i
         mv ./input/*.txt ./
         for file in $(find . -name *.txt -type f); do
             total_lines=$(cat $1.md | wc -l)
