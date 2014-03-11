@@ -8,8 +8,10 @@
 
 typedef hash_table_t Graph;
 
-Graph* create_graph(char* filename);
+Graph* create_graph();
+void read_file_on_graph(Graph*, char*);
 void read_ascii(char*, Graph*);
+Graph* graph_copy(Graph*);
 void populate_graph(Graph*, int, int);
 void set_vertex(Graph*, char*, vertex_node_t*);
 vertex_node_t* get_vertex(Graph*, char*);

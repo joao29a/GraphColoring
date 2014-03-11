@@ -5,8 +5,10 @@
 
 int main(int argc, char** argv){
     if (argc > 1){
-        Graph* graph = create_graph(argv[1]);
+        Graph* graph = create_graph();
+        read_file_on_graph(graph, argv[1]);
         printf("total colors: %zu\n", greed_coloring(graph));
+        free_graph(graph);
     }
     else printf("Missing arguments.\n");
     return 0;
