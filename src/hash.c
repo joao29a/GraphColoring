@@ -94,14 +94,7 @@ void free_hash_table(hash_table_t* table, void (*free_value)(void*)){
     while (i != NULL){    
         free(i->hash_node->key);
         free_value(i->hash_node->value);
-        hash_node_t* node = i->hash_node->next;
-        while (node != NULL){
-            hash_node_t* temp = node->next;
-            free(node->key);
-            free_value(node->value);
-            free(node);
-            node = temp;
-        }
+        free(i->hash_node);
         hash_iterator_t* dump = i;
         i = i->next;
         free(dump);

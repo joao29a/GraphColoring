@@ -1,11 +1,11 @@
-#ifndef GREED_H
-#define GREED_H
+#ifndef ANT_H
+#define ANT_H
 
 #include "heap.h"
 #include "graph.h"
 #include "hash.h"
 #include "vertex.h"
 
-size_t greed_coloring(Graph* graph);
+Graph* ant_system(Graph*);
 
 #endif

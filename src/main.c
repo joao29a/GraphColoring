@@ -1,14 +1,14 @@
 #include "hdr/graph.h"
 #include "hdr/bin2asc.h"
 #include "hdr/heap.h"
-#include "hdr/greed_coloring.h"
+#include "hdr/ant_system.h"
 
 int main(int argc, char** argv){
     if (argc > 1){
-        Graph* graph = create_graph();
+        Graph *graph, *best;
+        graph = create_graph();
         read_file_on_graph(graph, argv[1]);
-        printf("total colors: %zu\n", greed_coloring(graph));
-        free_graph(graph);
+        best = ant_system(graph);
     }
     else printf("Missing arguments.\n");
     return 0;
