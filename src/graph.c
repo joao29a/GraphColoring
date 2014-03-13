@@ -2,7 +2,7 @@
 #include "hdr/graph.h"
 
 Graph* create_graph(){
-    return create_hash_table(64000);
+    return create_hash_table(8000, (void (*)(void*)) &free_vertex_node);
 }
 
 void read_file_on_graph(Graph* graph, char* file){
@@ -25,7 +25,22 @@ vertex_node_t* get_vertex(Graph* graph, char* key){
 }
 
 void free_graph(Graph* graph){
-    free_hash_table(graph, (void (*)(void*)) &free_vertex_node);
+    free_hash_table(graph);
+}
+
+vertex_node_t** get_vertices(Graph* graph){
+    hash_iterator_t* iter = graph->begin;
+
+    vertex_node_t** vertices = (vertex_node_t**) malloc(sizeof(vertex_node_t*) *
+            graph->iterator_size);
+
+    int i = 0;
+    while (iter != NULL){
+        vertices[i++] = (vertex_node_t*) iter->hash_node->value;
+        iter = iter->next;
+    }
+
+    return vertices;
 }
 
 void populate_graph(Graph* graph, int a, int b){
@@ -34,41 +49,34 @@ void populate_graph(Graph* graph, int a, int b){
     sprintf(edge[1], "%d", b);
     int i;
     for (i = 0; i < 2; i++){
-        vertex_node_t* vertex = get_vertex(graph, edge[i]);
-        if (vertex == NULL){
-            vertex = create_vertex_node(edge[i]);
+        vertex_node_t* vertex_node = get_vertex(graph, edge[i]);
+        if (vertex_node == NULL){
+            vertex_t* vertex = create_vertex_t(edge[i]);
+            vertex_node = create_vertex_node(vertex);
             set_edge(vertex, edge[(i + 1) % 2]);
-            set_vertex(graph, edge[i], vertex);
+            set_vertex(graph, edge[i], vertex_node);
         }
-        else set_edge(vertex, edge[(i + 1) % 2]);
+        else set_edge(vertex_node->vertex, edge[(i + 1) % 2]);
     }
 }
 
-Graph* graph_copy(Graph* table){
-    Graph* table_copy = create_hash_table(table->size);
+/* This is useful to generate solutions. Instead of creating a copy
+ * of the whole graph, it copies only the address of the vertex */
+Graph* copy_graph(Graph* table){
+    Graph* table_copy = create_hash_table(table->size, &free);
     hash_iterator_t* iter = table->begin;
-    
+
     while (iter != NULL){
-        vertex_node_t* vertex = (vertex_node_t*) iter->hash_node->value;
-        vertex_node_t* value  = (vertex_node_t*) malloc(sizeof(vertex_node_t));
-        
-        value->name = (char*) malloc(sizeof(char) * strlen(vertex->name));
-        strcpy(value->name, vertex->name);
-        
-        value->color = vertex->color;
-        value->edges_size = vertex->edges_size;
-        
-        value->edges = (char**) malloc(sizeof(char*) * value->edges_size);
-        for (unsigned int i = 0; i < value->edges_size; i++){
-            value->edges[i] = (char*) malloc(sizeof(char) * 
-                    strlen(vertex->edges[i]));
-            strcpy(value->edges[i], vertex->edges[i]);
-        }
-        
-        set_hash(table_copy, value->name, value);
+        vertex_node_t* vertex_node = (vertex_node_t*) iter->hash_node->value;
+
+        vertex_node_t* new_vertex_node = create_vertex_node(vertex_node->vertex);
+
+        new_vertex_node->color = vertex_node->color;
+
+        set_hash(table_copy, vertex_node->vertex->name, new_vertex_node);
         iter = iter->next;
     }
-    
+
     return table_copy;
 }
 

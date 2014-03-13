@@ -14,11 +14,12 @@ int hash_function(hash_table_t* table, char* key){
     return hash % table->size;
 }
 
-hash_table_t* create_hash_table(int size){
+hash_table_t* create_hash_table(int size, void (*callback)(void*)){
     hash_table_t* table = NULL;
 
     table = (hash_table_t*) malloc(sizeof(hash_table_t));
     table->size = size;
+    table->iterator_size = 0;
     table->begin = NULL;
     table->end = NULL;
     table->node = (hash_node_t**) malloc(sizeof(hash_node_t*)*size);
@@ -27,6 +28,8 @@ hash_table_t* create_hash_table(int size){
     for (i = 0; i < size; i++){
         table->node[i] = NULL;
     }
+
+    table->free_value = callback;
 
     return table;
 }
@@ -52,6 +55,7 @@ void set_hash_iterator(hash_table_t* table, hash_node_t* node){
         table->end->hash_node = node;
         table->end->next = NULL;
     }
+    table->iterator_size++;
 }
 
 void set_hash(hash_table_t* table, char* key, void* value){
@@ -66,7 +70,10 @@ void set_hash(hash_table_t* table, char* key, void* value){
     else{
         while (node->next != NULL && strcmp(node->key, key) != 0)
             node = node->next;
-        if (strcmp(node->key, key) == 0) node->value = value;
+        if (strcmp(node->key, key) == 0){
+            table->free_value(node->value);
+            node->value = value;
+        }
         else if (node->next == NULL){
             node->next = create_pair(key, value);
             set_hash_iterator(table, node->next);
@@ -89,11 +96,11 @@ void* get_hash(hash_table_t* table, char* key){
     return NULL;
 }
 
-void free_hash_table(hash_table_t* table, void (*free_value)(void*)){
+void free_hash_table(hash_table_t* table){
     hash_iterator_t* i = table->begin;
     while (i != NULL){    
         free(i->hash_node->key);
-        free_value(i->hash_node->value);
+        table->free_value(i->hash_node->value);
         free(i->hash_node);
         hash_iterator_t* dump = i;
         i = i->next;
