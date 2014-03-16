@@ -104,13 +104,13 @@ int cost(Graph* solution){
 
 Graph* reduce_color(Graph* graph, int cost){
     Graph* s = copy_graph(graph);
-    
+
     hash_iterator_t* iter = s->begin;
-    
+
     while (iter != NULL){
         vertex_node_t* vertex_node = (vertex_node_t*) iter->hash_node->value;
-        if (vertex_node->color == (cost - 1)){
-            vertex_node->color = rand() % (cost - 2);
+        if (vertex_node->color == cost){
+            vertex_node->color = rand() % cost;
         }
         iter = iter->next;
     }
@@ -118,29 +118,58 @@ Graph* reduce_color(Graph* graph, int cost){
     return s;
 }
 
-int conflict_cost(Graph* graph, char** conflict_vertices){
-    hash_iterator_t* iter = graph->begin;
-    
-    int cost = 0;
 
+void increment_cost(char* name, char* vertex_name, hash_table_t* rep, int* cost, 
+        char** conflict_vt){
+    if (name == NULL){
+        set_hash(rep, vertex_name, vertex_name);
+        if (conflict_vt != NULL)
+            conflict_vt[*cost] = vertex_name;
+        *cost += 1;
+    }
+}
+
+void count_cost(Graph* graph, char* name, hash_table_t* rep, int* cost,
+        char** conflict_vt){
+    vertex_node_t* vertex_node = get_vertex(graph, name);
+    vertex_t* vertex = vertex_node->vertex;
+    for (u_int32 i = 0; i < vertex->edges_size; i++){
+        vertex_node_t* adj_vertex_node = get_vertex(graph, vertex->edges[i]);
+
+        if (vertex_node->color == adj_vertex_node->color){
+            char* name = (char*) get_hash(rep, vertex_node->vertex->name);
+            increment_cost(name, vertex_node->vertex->name, rep, cost, conflict_vt);
+            name = (char*) get_hash(rep, adj_vertex_node->vertex->name);
+            increment_cost(name, adj_vertex_node->vertex->name, rep, cost, conflict_vt);
+        }
+    }
+}
+
+char** conflict_vertices(Graph* graph, int* size){
+    hash_iterator_t* iter = graph->begin;
+    char** conflict_vt = (char**) malloc(sizeof(char*) * graph->iterator_size);
+    int k = 0;
+    hash_table_t* rep = create_hash_table(graph->iterator_size, NULL);
     while (iter != NULL){
         vertex_node_t* vertex_node = (vertex_node_t*) iter->hash_node->value;
         vertex_t* vertex = vertex_node->vertex;
-
-        for (u_int32 i = 0; i < vertex->edges_size; i++){
-            vertex_node_t* adj_vertex_node = get_vertex(graph, vertex->edges[i]);
-
-            if (vertex_node->color == adj_vertex_node->color){
-                if (conflict_vertices != NULL){
-                    conflict_vertices[cost] = vertex_node->vertex->name;
-                }
-                cost++;
-            }
-        }
-
+        char* name = (char*) get_hash(rep, vertex->name);
+        if (name == NULL)
+            count_cost(graph, vertex->name, rep, &k, conflict_vt);
         iter = iter->next;
     }
+    free_hash_table(rep);
+    *size = k;
+    return conflict_vt;
+}
 
+int conflict_cost(Graph* graph, char** conflict_vertices, int size){
+    int cost = 0;
+    hash_table_t* rep = create_hash_table(graph->iterator_size, NULL);
+    for (int i = 0; i < size; i++){
+        count_cost(graph, conflict_vertices[i], rep, &cost, NULL);
+    }
+    free_hash_table(rep);
     return cost;
 }
 
@@ -148,32 +177,27 @@ vertex_node_t** malloc_vertex_arr(int size){
     return (vertex_node_t**) malloc(sizeof(vertex_node_t*) * size);
 }
 
-Graph* generate_candidates(Graph* graph, char** conflict_vertices,
+Graph* generate_candidates(Graph* graph, char** conflict_vt,
         int conflict_c, vertex_node_t** tabu_list, int* tabu_pos, 
-        char** vertices){
+        int best_cost){
 
     Graph* candidate = copy_graph(graph);
 
-    char* vertex_name = conflict_vertices[rand() % conflict_c];
-
-    vertex_node_t* vertex_node = get_vertex(candidate, vertex_name);
-
-    vertex_name = vertices[rand() % graph->iterator_size];
-
-    vertex_node_t* vertex_node2 = get_vertex(candidate, vertex_name);
-    
-    int tmp = vertex_node->color;
-    vertex_node->color = vertex_node2->color;
-    vertex_node2->color = tmp;
+    for (int i = 0; i < conflict_c; i++){
+        char* vertex_name = conflict_vt[i];
+        vertex_node_t* vertex_node = get_vertex(candidate, vertex_name);
+        vertex_node->color = rand() % best_cost;
+    }
 
     return candidate;
 }
 
-Graph* get_best_candidate(Graph** candidates, int candidates_len, int* best_cost){
+Graph* get_best_candidate(Graph** candidates, int candidates_len, char** conflict_vt, 
+        int conflict_len, int* best_cost){
     Graph* best = candidates[0];
-    int conflict_best = conflict_cost(candidates[0], NULL);
+    int conflict_best = conflict_cost(candidates[0], conflict_vt, conflict_len);
     for (int i = 1; i < candidates_len; i++){
-        int conflict_c = conflict_cost(candidates[i], NULL);
+        int conflict_c = conflict_cost(candidates[i], conflict_vt, conflict_len);
         if (conflict_best > conflict_c){
             free_graph(best);
             best = candidates[i];
@@ -193,13 +217,11 @@ Graph* tabu_search(Graph* graph, int tabu_len, int candidates_len){
 
     printf("Initial: %d\n", best_cost);
 
-    char** vertices = get_vertices(graph);
+    int new_best_cost = best_cost - 1;
+    Graph* s = reduce_color(best, new_best_cost);
 
-    Graph* s = reduce_color(best, best_cost);
-
-    char** conflict_vertices = (char**) malloc(sizeof(char*) * best->iterator_size);
-
-    int conflict_c = conflict_cost(s, conflict_vertices);
+    int conflict_c;
+    char** conflict_vt = conflict_vertices(s, &conflict_c);
 
     int tabu_pos = 0;
     vertex_node_t** tabu_list = malloc_vertex_arr(tabu_len);
@@ -209,36 +231,40 @@ Graph* tabu_search(Graph* graph, int tabu_len, int candidates_len){
     while (iter < MAX_ITER){
         Graph** candidates = (Graph**) malloc(sizeof(Graph*) * candidates_len);
         for (int i = 0; i < candidates_len; i++){
-            candidates[i] = generate_candidates(s, conflict_vertices, conflict_c,
-                    tabu_list, &tabu_pos, vertices);
+            candidates[i] = generate_candidates(s, conflict_vt, conflict_c,
+                    tabu_list, &tabu_pos, new_best_cost);
         }
 
         int conflict_cand_c;
         Graph* best_candidate = get_best_candidate(candidates, candidates_len, 
-                &conflict_cand_c);
+                conflict_vt, conflict_c, &conflict_cand_c);
 
+     //   printf("%d %d\n", conflict_c, conflict_cand_c);
         if (conflict_c > conflict_cand_c){
             free_graph(s);
+            free(conflict_vt);
             s = best_candidate;
-            conflict_c = conflict_cost(s, conflict_vertices);
+            conflict_vt = conflict_vertices(s, &conflict_c);
         }
         else free_graph(best_candidate);
 
         if (conflict_c == 0){
-            best_cost = cost(s);
+            best_cost = new_best_cost;
+            printf("%d\n",best_cost);
             free_graph(best);
             best = s;
 
-            s = reduce_color(best, best_cost);
-            conflict_c = conflict_cost(s, conflict_vertices);
+            new_best_cost = best_cost - 1;
+            s = reduce_color(best, new_best_cost);
+            free(conflict_vt);
+            conflict_vt = conflict_vertices(s, &conflict_c);
         }
 
         free(candidates);
         iter++;
     }
 
-    free(vertices);
-    free(conflict_vertices);
+    free(conflict_vt);
     free(tabu_list);
 
     printf("cost: %d\n",best_cost);

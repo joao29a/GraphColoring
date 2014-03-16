@@ -100,7 +100,8 @@ void free_hash_table(hash_table_t* table){
     hash_iterator_t* i = table->begin;
     while (i != NULL){    
         free(i->hash_node->key);
-        table->free_value(i->hash_node->value);
+        if (table->free_value != NULL)
+            table->free_value(i->hash_node->value);
         free(i->hash_node);
         hash_iterator_t* dump = i;
         i = i->next;
