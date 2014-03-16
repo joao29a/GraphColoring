@@ -7,7 +7,10 @@
 #include "vertex.h"
 #include <time.h>
 
-void set_adj_colors(hash_table_t*, Graph*, vertex_node_t*, size_t);
-Graph* tabu_search(Graph*);
+#define MAX_ITER 1000
+
+void set_adj_colors(hash_table_t*, Graph*, vertex_t*);
+void set_min_color(hash_table_t*, vertex_node_t*, size_t*);
+Graph* tabu_search(Graph*, int, int);
 
 #endif

@@ -28,15 +28,15 @@ void free_graph(Graph* graph){
     free_hash_table(graph);
 }
 
-vertex_node_t** get_vertices(Graph* graph){
+char** get_vertices(Graph* graph){
     hash_iterator_t* iter = graph->begin;
 
-    vertex_node_t** vertices = (vertex_node_t**) malloc(sizeof(vertex_node_t*) *
-            graph->iterator_size);
+    char** vertices = (char**) malloc(sizeof(char*) * graph->iterator_size);
 
     int i = 0;
     while (iter != NULL){
-        vertices[i++] = (vertex_node_t*) iter->hash_node->value;
+        vertex_node_t* vertex_node = (vertex_node_t*) iter->hash_node->value;
+        vertices[i++] = vertex_node->vertex->name;
         iter = iter->next;
     }
 
