@@ -173,12 +173,8 @@ int conflict_cost(Graph* graph, char** conflict_vertices, int size){
     return cost;
 }
 
-vertex_node_t** malloc_vertex_arr(int size){
-    return (vertex_node_t**) malloc(sizeof(vertex_node_t*) * size);
-}
-
 Graph* generate_candidates(Graph* graph, char** conflict_vt,
-        int conflict_c, vertex_node_t** tabu_list, int* tabu_pos, 
+        int conflict_c, tabu_t** tabu_list, int* tabu_pos, 
         int best_cost){
 
     Graph* candidate = copy_graph(graph);
@@ -186,7 +182,24 @@ Graph* generate_candidates(Graph* graph, char** conflict_vt,
     for (int i = 0; i < conflict_c; i++){
         char* vertex_name = conflict_vt[i];
         vertex_node_t* vertex_node = get_vertex(candidate, vertex_name);
-        vertex_node->color = rand() % best_cost;
+        int new_color = rand() % best_cost;
+        int is_tabu = 0;
+        for (int j = 0; j < *tabu_pos; j++){
+            if (strcmp(tabu_list[j]->vertex_name, 
+                        vertex_node->vertex->name) == 0 
+                    && tabu_list[j]->color == new_color){
+                
+                is_tabu = 1;
+            }
+        }
+        if (!is_tabu){
+            vertex_node->color = new_color;
+            tabu_list[*tabu_pos] = (tabu_t*) malloc(sizeof(tabu_t));
+            vertex_node_t* tmp_vet = get_vertex(graph, vertex_node->vertex->name);
+            tabu_list[*tabu_pos]->vertex_name = tmp_vet->vertex->name;
+            tabu_list[*tabu_pos]->color = vertex_node->color;
+            *tabu_pos += 1;
+        }
     }
 
     return candidate;
@@ -209,6 +222,17 @@ Graph* get_best_candidate(Graph** candidates, int candidates_len, char** conflic
     return best;
 }
 
+void update_tabu_list(tabu_t** tabu_list, int* tabu_pos, int tabu_len){
+    int j = 0;
+    for (int i = 0; i < *tabu_pos; i++){
+        if (i >= *tabu_pos - tabu_len){
+            tabu_list[j++] = tabu_list[i];
+        }
+        else free(tabu_list[i]);
+    }
+    *tabu_pos = tabu_len;
+}
+
 Graph* tabu_search(Graph* graph, int tabu_len, int candidates_len){
     Graph* best = initial_solution(graph);
     int best_cost = cost(best);
@@ -224,7 +248,8 @@ Graph* tabu_search(Graph* graph, int tabu_len, int candidates_len){
     char** conflict_vt = conflict_vertices(s, &conflict_c);
 
     int tabu_pos = 0;
-    vertex_node_t** tabu_list = malloc_vertex_arr(tabu_len);
+    tabu_t** tabu_list = (tabu_t**) malloc(sizeof(tabu_t*) * candidates_len 
+            * graph->iterator_size);
 
     int iter = 0;
 
@@ -239,7 +264,6 @@ Graph* tabu_search(Graph* graph, int tabu_len, int candidates_len){
         Graph* best_candidate = get_best_candidate(candidates, candidates_len, 
                 conflict_vt, conflict_c, &conflict_cand_c);
 
-     //   printf("%d %d\n", conflict_c, conflict_cand_c);
         if (conflict_c > conflict_cand_c){
             free_graph(s);
             free(conflict_vt);
@@ -250,7 +274,7 @@ Graph* tabu_search(Graph* graph, int tabu_len, int candidates_len){
 
         if (conflict_c == 0){
             best_cost = new_best_cost;
-            printf("%d\n",best_cost);
+            printf("Improvement: %d\n",best_cost);
             free_graph(best);
             best = s;
 
@@ -260,6 +284,9 @@ Graph* tabu_search(Graph* graph, int tabu_len, int candidates_len){
             conflict_vt = conflict_vertices(s, &conflict_c);
         }
 
+        if (tabu_pos > tabu_len)
+            update_tabu_list(tabu_list, &tabu_pos, tabu_len);
+
         free(candidates);
         iter++;
     }
@@ -267,7 +294,7 @@ Graph* tabu_search(Graph* graph, int tabu_len, int candidates_len){
     free(conflict_vt);
     free(tabu_list);
 
-    printf("cost: %d\n",best_cost);
+    printf("Final: %d\n",best_cost);
 
     return best;
 }

@@ -9,6 +9,11 @@
 
 #define MAX_ITER 1000
 
+typedef struct tabu_st{
+    char* vertex_name;
+    int color;
+}tabu_t;
+
 void set_adj_colors(hash_table_t*, Graph*, vertex_t*);
 void set_min_color(hash_table_t*, vertex_node_t*, size_t*);
 Graph* tabu_search(Graph*, int, int);
