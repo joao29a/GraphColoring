@@ -1,90 +1,18 @@
 #include "hdr/tabu_search.h"
 
-int compare(vertex_node_t* vertex_node1, vertex_node_t* vertex_node2){
-    return vertex_node1->vertex->edges_size > 
-        vertex_node2->vertex->edges_size;
-}
-
-/* O(2V) */
-vertex_node_t** init_heap(Graph* graph, size_t* len){
-    vertex_node_t** heapq = (vertex_node_t**) create_heap(graph->iterator_size);
-
-    hash_iterator_t* j = graph->begin;
-    while (j != NULL){
-        heapq[*len] = (vertex_node_t*) j->hash_node->value;
-        *len += 1;
-        j = j->next;
-    }
-
-    build_heap((void**) heapq, *len, (int(*)(void*,void*)) &compare);
-
-    return heapq;
-}
-
-
-void set_adj_colors(hash_table_t* adj_colors, Graph* graph_color, 
-        vertex_t* vertex){
-
-    char color[10];
-    for (u_int32 i = 0; i < vertex->edges_size; i++){
-        vertex_node_t* adj_vertex = (vertex_node_t*) 
-            get_vertex(graph_color, vertex->edges[i]);
-
-        if (adj_vertex->color != -1){
-            sprintf(color,"%d",adj_vertex->color);
-            char* value = (char*) malloc(sizeof(char) * strlen(vertex->name));
-            strcpy(value, vertex->name);
-            set_hash(adj_colors, color, value);
-        }
-    }
-
-}
-
-void set_min_color(hash_table_t* adj_colors, vertex_node_t* vertex_node, 
-        size_t* used_len){
-
-    char color[10];
-    for (u_int32 i = 0; i < *used_len; i++){
-        sprintf(color,"%lu",i);
-        char* name = (char*) get_hash(adj_colors, color);
-
-        if (name == NULL || strcmp(name, vertex_node->vertex->name) != 0){
-            vertex_node->color = i;
-            break;
-        }
-    }
-
-    if (vertex_node->color == -1){
-        vertex_node->color = *used_len;
-        *used_len += 1;
-    }
-
-}
-
-/* Largest First Algorithm O(V*E) */
 Graph* initial_solution(Graph* graph){
     Graph* solution = copy_graph(graph);
 
-    size_t heapq_len = 0, used_len = 1;
-    vertex_node_t** heapq = init_heap(solution, &heapq_len);
+    hash_iterator_t* iter = solution->begin;
+    
+    int color = 0;
+    while (iter != NULL){
+        vertex_node_t* vertex_node = (vertex_node_t*) iter->hash_node->value;
 
-    hash_table_t* adj_colors = create_hash_table(heapq_len, &free);
+        vertex_node->color = color++;
 
-    while (heapq_len > 0){
-        vertex_node_t* vertex_node = (vertex_node_t*) heap_pop((void**) heapq, 
-                &heapq_len, (int(*)(void*,void*)) &compare);
-
-        vertex_t* vertex = vertex_node->vertex;
-
-        set_adj_colors(adj_colors, solution, vertex);
-
-        set_min_color(adj_colors, vertex_node, &used_len);
-
+        iter = iter->next;
     }
-
-    free(heapq);
-
-    free_hash_table(adj_colors);
 
     return solution;
 }
@@ -179,27 +107,27 @@ Graph* generate_candidates(Graph* graph, char** conflict_vt,
 
     Graph* candidate = copy_graph(graph);
 
-    for (int i = 0; i < conflict_c; i++){
-        char* vertex_name = conflict_vt[i];
-        vertex_node_t* vertex_node = get_vertex(candidate, vertex_name);
-        int new_color = rand() % best_cost;
-        int is_tabu = 0;
-        for (int j = 0; j < *tabu_pos; j++){
-            if (strcmp(tabu_list[j]->vertex_name, 
-                        vertex_node->vertex->name) == 0 
-                    && tabu_list[j]->color == new_color){
-                
-                is_tabu = 1;
-            }
+    int sorted = rand() % conflict_c;
+    
+    char* vertex_name = conflict_vt[sorted];
+    vertex_node_t* vertex_node = get_vertex(candidate, vertex_name);
+    int new_color = rand() % best_cost;
+    int is_tabu = 0;
+    for (int j = 0; j < *tabu_pos; j++){
+        if (strcmp(tabu_list[j]->vertex_name, 
+                    vertex_node->vertex->name) == 0 
+                && tabu_list[j]->color == new_color){
+
+            is_tabu = 1;
         }
-        if (!is_tabu){
-            vertex_node->color = new_color;
-            tabu_list[*tabu_pos] = (tabu_t*) malloc(sizeof(tabu_t));
-            vertex_node_t* tmp_vet = get_vertex(graph, vertex_node->vertex->name);
-            tabu_list[*tabu_pos]->vertex_name = tmp_vet->vertex->name;
-            tabu_list[*tabu_pos]->color = vertex_node->color;
-            *tabu_pos += 1;
-        }
+    }
+    if (!is_tabu){
+        vertex_node->color = new_color;
+        tabu_list[*tabu_pos] = (tabu_t*) malloc(sizeof(tabu_t));
+        vertex_node_t* tmp_vet = get_vertex(graph, vertex_node->vertex->name);
+        tabu_list[*tabu_pos]->vertex_name = tmp_vet->vertex->name;
+        tabu_list[*tabu_pos]->color = vertex_node->color;
+        *tabu_pos += 1;
     }
 
     return candidate;
@@ -255,22 +183,25 @@ Graph* tabu_search(Graph* graph, int tabu_len, int candidates_len){
 
     while (iter < MAX_ITER){
         Graph** candidates = (Graph**) malloc(sizeof(Graph*) * candidates_len);
-        for (int i = 0; i < candidates_len; i++){
-            candidates[i] = generate_candidates(s, conflict_vt, conflict_c,
-                    tabu_list, &tabu_pos, new_best_cost);
-        }
+        
+        if (conflict_c > 0){
+            for (int i = 0; i < candidates_len; i++){
+                candidates[i] = generate_candidates(s, conflict_vt, conflict_c,
+                        tabu_list, &tabu_pos, new_best_cost);
+            }
 
-        int conflict_cand_c;
-        Graph* best_candidate = get_best_candidate(candidates, candidates_len, 
-                conflict_vt, conflict_c, &conflict_cand_c);
+            int conflict_cand_c;
+            Graph* best_candidate = get_best_candidate(candidates, candidates_len, 
+                    conflict_vt, conflict_c, &conflict_cand_c);
 
-        if (conflict_c > conflict_cand_c){
-            free_graph(s);
-            free(conflict_vt);
-            s = best_candidate;
-            conflict_vt = conflict_vertices(s, &conflict_c);
+            if (conflict_c > conflict_cand_c){
+                free_graph(s);
+                free(conflict_vt);
+                s = best_candidate;
+                conflict_vt = conflict_vertices(s, &conflict_c);
+            }
+            else free_graph(best_candidate);
         }
-        else free_graph(best_candidate);
 
         if (conflict_c == 0){
             best_cost = new_best_cost;
