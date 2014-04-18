@@ -1,26 +1,35 @@
 #!/bin/bash
 
 prog=color.out
+tabu=15
+candidates=1000
+
+run-all(){
+    time for i in $(find ./input/ -type f | sort -V); do
+        time-one $i $tabu $candidates
+    done
+}
+
 
 time-all(){
     time for i in $(find ./input/ -type f); do 
-        time-one $i
+        time-one $i $1 $2
     done
 }
 
 time-one(){
-    echo $1; time ./$prog $1; 
+    echo $1; time ./$prog $1 $2 $3; 
     echo; 
 }
 
 perf-all(){
     for i in $(find ./input/ -type f); do
-        perf $1 $i
+        perf $1 $i 
     done
 }
 
 perf(){
-    psrun -c $1.xml -o $2 -F text ./$prog $2
+    psrun -c $1.xml -o $2 -F text ./$prog $2 $3 $4
     mv ./input/*.txt ./
     for file in $(find . -name *.txt -type f); do
         let total_lines=$(cat $1.md | wc -l)+1
@@ -45,4 +54,4 @@ clean(){
     done
 }
 
-$1 $2 $3
+$1 $2 $3 $4 $5

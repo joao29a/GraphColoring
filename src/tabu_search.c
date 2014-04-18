@@ -128,18 +128,27 @@ Graph* generate_candidates(Graph* graph, char** conflict_vt,
         tabu_list[*tabu_pos]->vertex_name = tmp_vet->vertex->name;
         tabu_list[*tabu_pos]->color = vertex_node->color;
         *tabu_pos += 1;
+        return candidate;
     }
 
-    return candidate;
+    return NULL;
+
 }
 
 Graph* get_best_candidate(Graph** candidates, int candidates_len, char** conflict_vt, 
         int conflict_len, int* best_cost){
-    Graph* best = candidates[0];
-    int conflict_best = conflict_cost(candidates[0], conflict_vt, conflict_len);
-    for (int i = 1; i < candidates_len; i++){
+    Graph* best = NULL;
+    int conflict_best;
+    for (int i = 0; i < candidates_len; i++){
+        if (candidates[i] == NULL) continue;
+        
         int conflict_c = conflict_cost(candidates[i], conflict_vt, conflict_len);
-        if (conflict_best > conflict_c){
+        
+        if (best == NULL){
+            best = candidates[i];
+            conflict_best = conflict_c;
+        }
+        else if (conflict_best > conflict_c){
             free_graph(best);
             best = candidates[i];
             conflict_best = conflict_c;
