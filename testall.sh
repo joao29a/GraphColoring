@@ -2,7 +2,7 @@
 
 prog=color.out
 tabu=15
-candidates=1000
+candidates=10000
 
 run-all(){
     time for i in $(find ./input/ -type f | sort -V); do
@@ -28,6 +28,7 @@ perf-all(){
     done
 }
 
+#FIXME
 perf(){
     psrun -c $1.xml -o $2 -F text ./$prog $2 $3 $4
     mv ./input/*.txt ./

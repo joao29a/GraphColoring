@@ -208,7 +208,8 @@ Graph* tabu_search(Graph* graph, int tabu_len, int candidates_len){
                 s = best_candidate;
                 conflict_vt = conflict_vertices(s, &conflict_c);
             }
-            else free_graph(best_candidate);
+            else if (best_candidate != NULL)
+                free_graph(best_candidate);
         }
 
         if (conflict_c == 0){

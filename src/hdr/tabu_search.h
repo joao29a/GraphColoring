@@ -7,7 +7,7 @@
 #include "vertex.h"
 #include <time.h>
 
-#define MAX_ITER 1000
+#define MAX_ITER 5000
 
 typedef struct tabu_st{
     char* vertex_name;
