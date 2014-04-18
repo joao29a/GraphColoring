@@ -105,23 +105,22 @@ Graph* generate_candidates(Graph* graph, char** conflict_vt,
         int conflict_c, tabu_t** tabu_list, int* tabu_pos, 
         int best_cost){
 
-    Graph* candidate = copy_graph(graph);
-
     int sorted = rand() % conflict_c;
     
     char* vertex_name = conflict_vt[sorted];
-    vertex_node_t* vertex_node = get_vertex(candidate, vertex_name);
     int new_color = rand() % best_cost;
     int is_tabu = 0;
     for (int j = 0; j < *tabu_pos; j++){
         if (strcmp(tabu_list[j]->vertex_name, 
-                    vertex_node->vertex->name) == 0 
+                    vertex_name) == 0 
                 && tabu_list[j]->color == new_color){
 
             is_tabu = 1;
         }
     }
     if (!is_tabu){
+        Graph* candidate = copy_graph(graph);
+        vertex_node_t* vertex_node = get_vertex(candidate, vertex_name);
         vertex_node->color = new_color;
         tabu_list[*tabu_pos] = (tabu_t*) malloc(sizeof(tabu_t));
         vertex_node_t* tmp_vet = get_vertex(graph, vertex_node->vertex->name);
