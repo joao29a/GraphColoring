@@ -3,10 +3,11 @@
 prog=color.out
 tabu=15
 candidates=10000
+iterations=10000
 
 run-all(){
     time for i in $(find ./input/ -type f | sort -V); do
-        time-one $i $tabu $candidates
+        time-one $i $tabu $candidates $iterations
     done
 }
 
@@ -18,7 +19,8 @@ time-all(){
 }
 
 time-one(){
-    echo $1; time ./$prog $1 $2 $3; 
+    { time ./$prog $1 $tabu $candidates $iterations > results/$1 ; }\
+        2>> results/$1
     echo; 
 }
 
