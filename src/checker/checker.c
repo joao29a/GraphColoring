@@ -4,11 +4,12 @@
 void check_result(Graph* graph){
     char line[1024];
     char vertex[1024];
-    int color;
+    int color, total_colors = 0;
     while (fgets(line, 1024, stdin) != NULL){
         sscanf(line,"%s %d", vertex, &color);
         vertex_node_t* vertex_node = get_vertex(graph, vertex);
         vertex_node->color = color;
+        if (color > total_colors) total_colors = color;
     }
 
     hash_iterator_t* iter = graph->begin;
@@ -28,7 +29,7 @@ void check_result(Graph* graph){
 
         iter = iter->next;
     }
-    printf("OK.\n");
+    printf("OK. Colors: %d\n", total_colors + 1);
 }
 
 

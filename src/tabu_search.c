@@ -239,7 +239,7 @@ Graph* tabu_search(Graph* graph, int tabu_len, int candidates_len, int max_iter)
     free(tabu_list);
 
 #ifdef PRINT_COSTS
-    printf("Final: %d\n",best_cost);
+    printf("Final: %d\n", best_cost);
 #endif
 
     return best;
