@@ -1,4 +1,5 @@
 #include "hdr/tabu_search.h"
+#include <limits.h>
 
 Graph* initial_solution(Graph* graph){
     Graph* solution = copy_graph(graph);
@@ -137,7 +138,7 @@ Graph* generate_candidates(Graph* graph, char** conflict_vt,
 Graph* get_best_candidate(Graph** candidates, int candidates_len, char** conflict_vt, 
         int conflict_len, int* best_cost){
     Graph* best = NULL;
-    int conflict_best;
+    int conflict_best = INT_MAX;
     for (int i = 0; i < candidates_len; i++){
         if (candidates[i] == NULL) continue;
         

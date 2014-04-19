@@ -22,14 +22,15 @@ void check_result(Graph* graph){
                 get_vertex(graph, vertex_node->vertex->edges[i]);
 
             if (vertex_node->color == adj_vertex_node->color){
-                printf("Fail.\n");
+                printf("Fail. %s %s ", vertex_node->vertex->name,
+                        adj_vertex_node->vertex->name);
                 return;
             }
         }
 
         iter = iter->next;
     }
-    printf("OK. Colors: %d\n", total_colors + 1);
+    printf("OK. Colors: %d ", total_colors + 1);
 }
 
 
