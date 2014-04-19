@@ -107,3 +107,15 @@ char get_file_type(char* file){
     }
     return 'a';
 }
+
+void print_graph_color(Graph* graph){
+    hash_iterator_t* iter = graph->begin;
+
+    while (iter != NULL){
+        vertex_node_t* vertex_node = (vertex_node_t*) iter->hash_node->value;
+
+        printf("%s %d\n", vertex_node->vertex->name, vertex_node->color);
+
+        iter = iter->next;
+    }
+}

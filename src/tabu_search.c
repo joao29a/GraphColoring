@@ -175,7 +175,9 @@ Graph* tabu_search(Graph* graph, int tabu_len, int candidates_len, int max_iter)
 
     srand(time(NULL));
 
+#ifdef PRINT_COSTS
     printf("Initial: %d\n", best_cost);
+#endif
 
     int new_best_cost = best_cost - 1;
     Graph* s = reduce_color(best, new_best_cost);
@@ -214,7 +216,9 @@ Graph* tabu_search(Graph* graph, int tabu_len, int candidates_len, int max_iter)
 
         if (conflict_c == 0){
             best_cost = new_best_cost;
+#ifdef PRINT_COSTS
             printf("Improvement: %d\n",best_cost);
+#endif
             free_graph(best);
             best = s;
 
@@ -234,7 +238,9 @@ Graph* tabu_search(Graph* graph, int tabu_len, int candidates_len, int max_iter)
     free(conflict_vt);
     free(tabu_list);
 
+#ifdef PRINT_COSTS
     printf("Final: %d\n",best_cost);
+#endif
 
     return best;
 }

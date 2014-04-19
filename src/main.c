@@ -16,6 +16,9 @@ int main(int argc, char** argv){
         graph = create_graph();
         read_file_on_graph(graph, argv[1]);
         best = tabu_search(graph, tabu_size, candidates_size, iterations);
+#ifndef PRINT_COSTS
+        print_graph_color(best);
+#endif
     }
     else printf("Insert file name, tabu size and candidates size.\n");
     return 0;
