@@ -1,4 +1,3 @@
-./testall.sh
 ./input/gcol1                           : OK. Colors: 23 (0m 37s 976ms)
 ./input/gcol1                           : OK. Colors: 26 (1m 15s 959ms)
 ./input/gcol1                           : OK. Colors: 26 (0m 42s 220ms)
