@@ -1,0 +1,65 @@
+0 Level 1 data cache misses 2.737.245.680
+1 Level 1 instruction cache misses 8.555.709
+2 Level 2 data cache misses 753.451.263
+3 Level 2 instruction cache misses 4.944.287
+4 Level 1 cache misses 2.859.901.428
+5 Level 2 cache misses 800.368.205
+6 Level 3 cache misses 194.591.550
+7 Level 3 load misses 95.254.287
+8 Data translation lookaside buffer misses 290.085.634
+9 Instruction translation lookaside buffer misses 3.137.076
+10 Total translation lookaside buffer misses 293.222.710
+11 Level 1 load misses 2.446.047.437
+12 Level 1 store misses 227.182.999
+13 Level 2 load misses 524.273.598
+14 Level 2 store misses 229.177.665
+15 Unconditional branch instructions 6.656.575.667
+16 Conditional branch instructions 26.074.988.174
+17 Conditional branch instructions taken 23.358.823.436
+18 Conditional branch instructions not taken 16.703.604.997
+19 Conditional branch instructions mispredicted 230.135.557
+20 Conditional branch instructions correctly predicted 25.872.997.912
+21 Instructions issued 198.620.890.534
+22 Instructions completed 202.181.857.848
+23 Floating point instructions 0
+24 Load instructions 64.819.764.316
+25 Store instructions 30.043.513.160
+26 Branch instructions 40.062.428.433
+27 Cycles stalled on any resource 122.854.634.644
+28 Total cycles 214.016.561.604
+29 Load/store instructions completed 94.863.277.476
+30 Level 1 data cache hits 74.061.217.280
+31 Level 2 data cache hits 2.009.734.705
+32 Level 1 data cache accesses 76.798.462.960
+33 Level 2 data cache accesses 2.737.245.680
+34 Level 3 data cache accesses 753.451.263
+35 Level 1 data cache reads 91.270.646.040
+36 Level 2 data cache reads 2.446.047.437
+37 Level 3 data cache reads 524.273.598
+38 Level 1 data cache writes 30.682.401.435
+39 Level 2 data cache writes 227.182.999
+40 Level 3 data cache writes 229.177.665
+41 Level 1 instruction cache hits 69.242.876.684
+42 Level 2 instruction cache hits 3.707.286
+43 Level 1 instruction cache accesses 68.655.468.601
+44 Level 2 instruction cache accesses 8.644.317
+45 Level 3 instruction cache accesses 4.944.287
+46 Level 1 instruction cache reads 68.655.468.601
+47 Level 2 instruction cache reads 8.644.317
+48 Level 3 instruction cache reads 4.944.287
+49 Level 2 total cache hits 2.565.914.437
+50 Level 1 total cache accesses 145.453.931.561
+51 Level 2 total cache accesses 4.252.349.982
+52 Level 3 total cache accesses 800.368.205
+53 Level 1 total cache reads 159.926.114.641
+54 Level 2 total cache reads 2.454.691.754
+55 Level 3 total cache reads 529.217.885
+56 Level 2 total cache writes 30.682.401.435
+57 Level 3 total cache writes 229.177.665
+58 Floating point operations 1.028.060.737
+59 Floating point operations; optimized to count scaled single precision vector operations 0
+60 Floating point operations; optimized to count scaled double precision vector operations 0
+61 Single precision vector/SIMD instructions 0
+62 Double precision vector/SIMD instructions 0
+63 Reference clock cycles 214.167.034.690
+time: (1m 50s 174ms)
