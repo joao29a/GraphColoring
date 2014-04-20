@@ -1,10 +1,22 @@
-all: compile 
+cc=colorgcc
+flags=-g -Wall -Wextra -std=c11
 
-compile:
-	clang -g -Wall -Wextra src/*.c -o color.out -std=c11 -fopenmp
+all: sequential parallel
+
+sequential:
+	$(cc) $(flags) src/*.c src/sequential/*.c -o color_seq.out
+
+parallel:
+	$(cc) $(flags) src/*.c src/parallel/*.c -o color_par.out -fopenmp
 
 checker:
 	make -C ./src/checker
 
 run:
-	./testall.sh
+	./testall.sh 0
+
+run-parallel:
+	./testall.sh 1
+
+clean:
+	rm -rf *.out

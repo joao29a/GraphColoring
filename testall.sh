@@ -1,6 +1,11 @@
 #!/bin/bash
 
-prog=color.out
+if [ $1 -eq 0 ]; then
+    prog=color_seq.out
+else
+    prog=color_par.out
+fi
+
 checker=checker.out
 system=hardware/system.xml
 system_md=hardware/system.md
@@ -33,22 +38,22 @@ run-all(){
         old=$i
         for loop in `seq 1 $repeat`; do
             i=$old
-            perf $i $tabu $candidates $iterations
+            perf $i $tabu $candidates $iterations $threads
         done
     done
 }
 
 perf(){
-    printf "%-40s: " $i
+    printf "%-40s: " $1
     init=$(date +%s%3N)
-    psrun -c $system -o $1 -F text ./$prog $1 $2 $3 $4 > temp
+    psrun -c $system -o $1 -F text ./$prog $1 $2 $3 $4 $5 -p > temp
     let end=$(date +%s%3N)-$init
     let ms=$end%1000
     let sec=$end/1000
     let min=$sec/60
     let sec=$sec%60
     let total=$total+$end
-    cat temp | ./$checker $i
+    cat temp | ./$checker $1
     printf "(%'dm %'ds %'dms)\n" $min $sec $ms
     rm temp
     mv ./input/*.txt ./

@@ -1,6 +1,6 @@
-#include "hdr/graph.h"
-#include "hdr/bin2asc.h"
-#include "hdr/heap.h"
+#include "../hdr/graph.h"
+#include "../hdr/bin2asc.h"
+#include "../hdr/heap.h"
 #include "hdr/tabu_search.h"
 
 int main(int argc, char** argv){

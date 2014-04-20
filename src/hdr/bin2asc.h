@@ -13,7 +13,7 @@ int Nr_vert, Nr_edges;
 char Bitmap[MAX_NR_VERTICES][MAX_NR_VERTICESdiv8];
 
 #define MAX_PREAMBLE 10000
-static char Preamble[MAX_PREAMBLE];
+char Preamble[MAX_PREAMBLE];
 
 void write_graph_DIMACS_ascii(char*, void*, void (*)(void*,int,int));
 
