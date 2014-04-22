@@ -5,7 +5,7 @@
 #include <omp.h>
 
 int main(int argc, char** argv){
-    if (argc > 4){
+    if (argc > 5){
         int tabu_size = atoi(argv[2]);
         int candidates_size = atoi(argv[3]);
         int iterations = atoi(argv[4]);
@@ -23,10 +23,11 @@ int main(int argc, char** argv){
         graph = create_graph();
         read_file_on_graph(graph, argv[1]);
         best = tabu_search(graph, tabu_size, candidates_size, iterations, threads);
-#ifndef PRINT_COSTS
         print_graph_color(best);
-#endif
     }
-    else printf("Insert file name, tabu size, candidates size and number of threads\n");
+    else{
+        printf("Insert file name, tabu size, candidates size, iterations ");
+        printf("and number of threads\n");
+    }
     return 0;
 }

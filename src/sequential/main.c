@@ -4,7 +4,7 @@
 #include "hdr/tabu_search.h"
 
 int main(int argc, char** argv){
-    if (argc > 3){
+    if (argc > 4){
         int tabu_size = atoi(argv[2]);
         int candidates_size = atoi(argv[3]);
         int iterations = atoi(argv[4]);
@@ -20,6 +20,6 @@ int main(int argc, char** argv){
         print_graph_color(best);
 #endif
     }
-    else printf("Insert file name, tabu size and candidates size.\n");
+    else printf("Insert file name, tabu size, candidates size and iterations.\n");
     return 0;
 }

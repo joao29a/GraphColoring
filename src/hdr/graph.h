@@ -6,8 +6,6 @@
 #include "vertex.h"
 #include "bin2asc.h"
 
-//#define PRINT_COSTS
-
 typedef hash_table_t Graph;
 
 Graph* copy_graph(Graph*);
