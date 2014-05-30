@@ -1,7 +1,8 @@
 cc=gcc
+cc_mpi=mpicc.openmpi
 flags=-g -Wall -Wextra -std=c11
 inc_mpi=-I/usr/include/mpi
-ld=-lmpi -lpthread -lmpc
+ld=-lmpi -lmpl -lmpc
 defines=#-DPRINT_COSTS
 
 all: sequential parallel mpi
@@ -13,7 +14,7 @@ parallel:
 	$(cc) $(flags) src/*.c src/parallel/*.c -o color_par.out -fopenmp
 
 mpi:
-	$(cc) $(flags) src/*.c src/mpi/*.c -o color_mpi.out $(inc_mpi) $(ld)
+	$(cc_mpi) $(flags) src/*.c src/mpi/*.c -o color_mpi.out -lpthread
 
 checker:
 	make -C ./src/checker
