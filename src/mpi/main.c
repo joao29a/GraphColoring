@@ -55,8 +55,11 @@ int main(int argc, char** argv){
         srand(time(NULL) / (world_rank + 1)); // this is tricky
         tabu_search(graph, tabu_size, candidates_size, iterations, &colors);
 
+#ifdef PCOLORSD
+        printf("%d sending %d\n", world_rank, colors);
+#endif
+
         if (world_rank == 0){
-            printf("0 %d colors\n", colors);
             pthread_join(*thread, NULL);
             free(thread);
             args.colors[world_size - 1] = colors;
@@ -69,7 +72,6 @@ int main(int argc, char** argv){
             printf("Colors used: %d\n", least_color);
         }
         else {
-            printf("%d sending %d\n", world_rank, colors);
             MPI_Send(&colors, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
         }
 
